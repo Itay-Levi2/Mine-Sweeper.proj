@@ -1,0 +1,46 @@
+body {
+    background-color: black;
+    color:white;
+    text-align: center;
+  }
+  
+  table {
+    margin: auto;
+    border: solid 3px white;
+    height: 350px;
+    width: 350px;
+    
+  }
+
+  td{
+    border: solid white 1px;
+    width: 25%;
+    height: 25%;
+  }
+  
+  .empty {
+    background-color: green;
+  }
+  
+  
+  .cell {
+      background-color: blue;
+    }
+    
+    .mine {
+      background-color: red;
+    }
+
+    .hide {
+        background-color: yellow;
+    }
+
+    .modal {
+        display: none;
+    }
+
+    footer{
+        font-size: 25px;
+        margin-top: 50px;
+        background-color: lightgray;
+    }
