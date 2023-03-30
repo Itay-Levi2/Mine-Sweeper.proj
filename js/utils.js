@@ -19,6 +19,10 @@ function createMat(ROWS, COLS) {
   return mat
 }
 
+function getSparseMatrix(vals, rowIdx, colsIdx, cellsCount) {
+
+}
+
 function createRandomNumsMat(ROWS, COLS) {
   const nums = getRandomOrderNumbersArray(ROWS * COLS)
   const mat = []

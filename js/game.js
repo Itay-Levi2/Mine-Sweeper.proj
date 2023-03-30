@@ -1,8 +1,8 @@
 'use strict'
 
-const MINE = 'Mine'
+const MINE = '💣'
 const EMPTY = 'empty'
-const NEGS = ''
+const MARK = 'F'
 
 var gBoard
 
@@ -22,33 +22,39 @@ var gGame = {
 
 function onInit() {
     gBoard = buildBoard(4, 4)
-    console.table(gBoard)
+    // console.table(gBoard)
     renderBoard(gBoard, '.board')
     gGame.isOn = true
 }
 
+function getRandomMines(board) {
+    var randI = getRandomInt(0, 3)
+    var randJ = getRandomInt(0, 3)
+    board[randI][randJ].isMine = true
+}
 
 function buildBoard(Rows, Cols) {
+
     const board = []
     for (var i = 0; i < Rows; i++) {
         board[i] = []
         for (var j = 0; j < Cols; j++) {
             board[i][j] = {
                 type: EMPTY,
-                minesAroundCount: 4,
+                minesAroundCount: 0,
                 isShown: false,
                 isMine: false,
                 isMarked: false,
-
             }
-            if (i === 0 && j === 0) board[i][j].isMine = true
-            if (i === 1 && j === 1) board[i][j].isMine = true
+          
         }
     }
     return board
 }
 
 function renderBoard(board, selector) {
+    getRandomMines(board)
+    getRandomMines(board)
     var strHTML = ''
     for (var i = 0; i < board.length; i++) {
         strHTML += `<tr>`
@@ -79,10 +85,24 @@ function renderBoard(board, selector) {
     elBoard.innerHTML = strHTML
 }
 
+function showNegAround(board, rowsIdx, colsIdx) {
+    for (var i = rowsIdx - 1; i <= rowsIdx + 1; i++) {
+        if (i < 0 || i >= board[0].length) continue
+        for (var j = colsIdx - 1; j <= colsIdx + 1; j++) {
+            if (i === rowsIdx && j === colsIdx) continue
+            if (j < 0 || j >= board[0].length) continue
+            var currCell = { i, j}
+            // console.log(currCell)
+            renderCell(currCell, setMinesNegsCount(board, i, j))
+        }
+    }
+
+}
+
 function setMinesNegsCount(board, rowsIdx, colsIdx) {
     var negsCount = 0
     for (var i = rowsIdx - 1; i <= rowsIdx + 1; i++) {
-        if (i < 0 || i >= board.length) continue
+        if (i < 0 || i >= board[0].length) continue
         for (var j = colsIdx - 1; j <= colsIdx + 1; j++) {
             if (i === rowsIdx && j === colsIdx) continue
             if (j < 0 || j >= board[0].length) continue
@@ -93,18 +113,17 @@ function setMinesNegsCount(board, rowsIdx, colsIdx) {
     return negsCount
 }
 
-
 function onCellClicked(elCell) {
     if (gGame.isOn) {
-        console.log(elCell)
+        // console.log(elCell)
         var str = elCell.id.split('-')
-        console.log(str)
+        // console.log(str)
         var i = str[1]
         var j = str[2]
         var location = { i, j }
         var cell = gBoard[i][j]
         cell.isShown = true
-        console.log(cell)
+        // console.log(cell)
         if (cell.isMine) {
             elCell.classList.remove('hide')
             elCell.classList.add('mine')
@@ -113,7 +132,8 @@ function onCellClicked(elCell) {
         } else {
             elCell.classList.remove('hide')
             elCell.classList.add('empty')
-            renderCell(location, setMinesNegsCount(gBoard, i, j))
+            renderCell(location, EMPTY)
+            showNegAround(gBoard, i, j)
         }
     }
     gGame.shownCount++
@@ -126,19 +146,29 @@ function renderCell(location, value) {
     elCell.innerHTML = value
 }
 
+function cellMark(elCell) {
+
+}
+
 
 
 function gameOver() {
     if (gGame.isVictory === false) {
-        var elModal = document.querySelector('.modal')
+        const elMsg = document.querySelector('.msg1')
+        console.log(elMsg)
+        elMsg.classList.remove('msg1')
+        console.log(elMsg)
+        console.log('you lost')
+        const elModal = document.querySelector('.modal')
         gGame.isOn = false
         elModal.classList.remove('modal')
     } else {
-        var elModal = document.querySelector('.modal')
+        const elModal = document.querySelector('.modal')
         gGame.isOn = false
         elModal.classList.remove('modal')
-        const msg = elModal.querySelector('msg')
-
+        const elMsg = document.querySelector('.msg2')
+        elMsg.classList.remove('msg2')
+        console.log('you won')
     }
 }
 
@@ -147,14 +177,18 @@ function checkVictory() {
         gGame.isVictory = true
         gameOver()
     }
-    console.log('you won')
 }
 
+function hideModal() {
+
+}
 
 function showModal() {
 
+}
 
-
-
-    
+function getRandomInt(min, max) {
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min) + min)
 }
