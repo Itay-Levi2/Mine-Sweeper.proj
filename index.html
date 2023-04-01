@@ -16,16 +16,24 @@
     <tbody class="board"></tbody>
 </table>
 <br>
-<button class="restart-btn" onclick="onInit()">😃
-</button>
+<button class="timer">0:000</button>
+<button class="restart-btn" onclick="onInit()">😃</button>
+<button class="restart-btn2" onclick="onInit()">😭</button>
+<button class="restart-btn3" onclick="onInit()">😎</button>
+<button class="easy" onclick="chooseGameDifficulty(this)">Easy</button>
+<button class="medium" onclick="chooseGameDifficulty(this)">Medium</button>
+<button class="hard" onclick="chooseGameDifficulty(this)">Hard</button>
+
 <div class="modal">
-    <h2 class="msg1">Game Over!</h2>
+    <h2 class="msg1">You Lost!</h2>
     <h2 class="msg2">you win!</h2>
   </div>
 
 <footer>Itay-Levi</footer>
+
     <script src="js/utils.js"></script>
-    <script src="js/game.js"></script>
+    <!-- <script src="js/game.js"></script> -->
+    <script src="js/test.js"></script>
 </body>
 
 </html>

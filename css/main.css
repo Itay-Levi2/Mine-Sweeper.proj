@@ -8,15 +8,15 @@ body {
 table {
   margin: auto;
   border: solid 3px white;
-  height: 350px;
-  width: 350px;
+  /* height: 350px;
+  width: 350px; */
+  height: 450px;
+  width: 500px;
 
 }
 
 td {
   border: solid white 1px;
-  width: 25%;
-  height: 25%;
 }
 
 .empty {
@@ -26,14 +26,17 @@ td {
 
 .cell {
   background-color: blue;
+  height: 40px;
+  width: 40px;
 }
 
 .mine {
   background-color: red;
+
 }
 
 .hide {
-  background-color: yellow;
+  background-color: grey;
 }
 
 .modal {
@@ -52,6 +55,20 @@ footer {
   width: 50px;
   font-size: 25px;
 }
+.restart-btn2 {
+  background-color: white;
+  height: 50px;
+  width: 50px;
+  font-size: 25px;
+  display: none;
+}
+.restart-btn3 {
+  background-color: white;
+  height: 50px;
+  width: 50px;
+  font-size: 25px;
+  display: none;
+}
 
 .msg1 {
   display: none;
@@ -59,4 +76,8 @@ footer {
 
 .msg2 {
   display: none;
+}
+
+.cellClicked {
+  background-color: white;
 }

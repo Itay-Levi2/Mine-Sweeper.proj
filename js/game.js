@@ -1,15 +1,19 @@
 'use strict'
 
+window.addEventListener("contextmenu", e => e.preventDefault());
+
 const MINE = '💣'
-const EMPTY = 'empty'
-const MARK = 'F'
+const EMPTY = ''
+const MARK = '🚩'
 
 var gBoard
+var gLifes = 3
+var gdificulty = 4
 
-var gLevel = {
-    SIZE: 4,
-    MINES: 2
-}
+// var gLevel = {
+//     SIZE: 4,
+//     MINES: 2
+// }
 
 var gGame = {
     isOn: false,
@@ -19,18 +23,18 @@ var gGame = {
     secsPassed: 0
 }
 
-
 function onInit() {
     gBoard = buildBoard(4, 4)
-    // console.table(gBoard)
     renderBoard(gBoard, '.board')
     gGame.isOn = true
 }
 
-function getRandomMines(board) {
-    var randI = getRandomInt(0, 3)
-    var randJ = getRandomInt(0, 3)
-    board[randI][randJ].isMine = true
+function chooseGameDifficulty(elDifficulty) {
+   if (elDifficulty.classList.contain('easy')) gLevel.SIZE = 4
+   else if (elDifficulty.classList.contain('medium')) gLevel.SIZE = 4
+   else if (elDifficulty.classList.contain('hard')) gLevel.SIZE = 4
+
+console.log(elDifficulty)
 }
 
 function buildBoard(Rows, Cols) {
@@ -46,10 +50,17 @@ function buildBoard(Rows, Cols) {
                 isMine: false,
                 isMarked: false,
             }
-          
         }
     }
+    console.log(board)
     return board
+}
+
+function getRandomMines(board) {
+    console.log(board)
+    var randI = getRandomInt(0, 3)
+    var randJ = getRandomInt(0, 3)
+    board[randI][randJ].isMine = true
 }
 
 function renderBoard(board, selector) {
@@ -76,7 +87,7 @@ function renderBoard(board, selector) {
 
             }
             const tdid = `cell-${i}-${j}`
-            strHTML += `<td  onclick="onCellClicked(this)" id="${tdid}" class="${className} cell">${cell}</td>`
+            strHTML += `<td oncontextmenu="onMarkCell(this)" onclick="onCellClicked(this)" id="${tdid}" class="${className} cell">${cell}</td>`
         }
         strHTML += `</tr>`
     }
@@ -91,12 +102,11 @@ function showNegAround(board, rowsIdx, colsIdx) {
         for (var j = colsIdx - 1; j <= colsIdx + 1; j++) {
             if (i === rowsIdx && j === colsIdx) continue
             if (j < 0 || j >= board[0].length) continue
-            var currCell = { i, j}
+            var currCell = { i, j }
             // console.log(currCell)
             renderCell(currCell, setMinesNegsCount(board, i, j))
         }
     }
-
 }
 
 function setMinesNegsCount(board, rowsIdx, colsIdx) {
@@ -114,7 +124,7 @@ function setMinesNegsCount(board, rowsIdx, colsIdx) {
 }
 
 function onCellClicked(elCell) {
-    if (gGame.isOn) {
+    if (gGame.isOn) 
         // console.log(elCell)
         var str = elCell.id.split('-')
         // console.log(str)
@@ -122,20 +132,23 @@ function onCellClicked(elCell) {
         var j = str[2]
         var location = { i, j }
         var cell = gBoard[i][j]
+        if (cell.isShown) return
         cell.isShown = true
         // console.log(cell)
         if (cell.isMine) {
             elCell.classList.remove('hide')
             elCell.classList.add('mine')
             renderCell(location, MINE)
-            gameOver()
+            gLifes--
+            if (gLifes = 0) gameOver()
+
         } else {
             elCell.classList.remove('hide')
             elCell.classList.add('empty')
             renderCell(location, EMPTY)
             showNegAround(gBoard, i, j)
         }
-    }
+    
     gGame.shownCount++
     checkVictory()
 }
@@ -146,11 +159,16 @@ function renderCell(location, value) {
     elCell.innerHTML = value
 }
 
-function cellMark(elCell) {
+function onMarkCell(elCell) {
 
+    elCell.isMarked = true
+    console.log(elCell)
+    const id = elCell.id.split('-')
+    const i = id[1]
+    const j = id[2]
+
+    renderCell({ i, j }, MARK)
 }
-
-
 
 function gameOver() {
     if (gGame.isVictory === false) {
@@ -168,7 +186,7 @@ function gameOver() {
         elModal.classList.remove('modal')
         const elMsg = document.querySelector('.msg2')
         elMsg.classList.remove('msg2')
-        console.log('you won')
+        // console.log('you won')
     }
 }
 
@@ -177,14 +195,6 @@ function checkVictory() {
         gGame.isVictory = true
         gameOver()
     }
-}
-
-function hideModal() {
-
-}
-
-function showModal() {
-
 }
 
 function getRandomInt(min, max) {
